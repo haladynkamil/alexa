@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Website list</title>
+</head>
+<body>
+<form action="{% url 'website-list' %}" method="get">
+    <label for="filter">Website category</label>
+    <select name="filter">
+
+        {% for category in website_categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+
+    </select>
+    <input type="submit" value="Filter" />
+</form>
+<table>
+    <tr>
+        <th><a href="?o=title">Title</a></th>
+        <th><a href="?o=url">URL</a></th>
+        <th><a href="?o=alexa_rank">Alexa rank</a></th>
+        <th><a href="?o=-date_added">date_added</a></th>
+        <th><a href="?o=-date_updated">date_updated</a></th>
+    </tr>
+
+    {% for website in object_list %}
+        <tr>
+            <td><a href="{% url 'website-detail' website.pk %}">{{ website.title }}</a></td>
+            <td>{{ website.url }}</td>
+            <td>{{ website.alexa_rank }}</td>
+            <td>{{ website.date_added }}</td>
+            <td>{{ website.date_updated }}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+</body>
+</html>
